@@ -17,12 +17,11 @@ unordered_map<std::string, int> colMap = {
 
 int getColIndex(const string &colName,
                 const unordered_map<std::string, int> &colMap) {
-    // Look up the column name in the map
     auto it = colMap.find(colName);
     if (it == colMap.end()) {
-        return -1; // Not found
+        return -1;
     }
-    return it->second; // Return the corresponding index
+    return it->second;
 }
 
 vector<pair<string, double>> readFile(string interest) {
@@ -57,13 +56,11 @@ vector<pair<string, double>> readFile(string interest) {
 }
 
 void merge(vector<pair<string, double>> &data, int low, int mid, int high) {
-    // Create temporary vectors to hold left and right halves
     int leftSize = mid - low + 1;
     int rightSize = high - mid;
     vector<pair<string, double>> left(leftSize);
     vector<pair<string, double>> right(rightSize);
 
-    // Copy data to temporary vectors
     for (int i = 0; i < leftSize; i++) {
         left[i] = data[low + i];
     }
@@ -71,7 +68,6 @@ void merge(vector<pair<string, double>> &data, int low, int mid, int high) {
         right[j] = data[mid + 1 + j];
     }
 
-    // Merge the temporary vectors back into data
     int i = 0, j = 0, k = low;
     while (i < leftSize && j < rightSize) {
         if (left[i].second <= right[j].second) {
@@ -84,7 +80,6 @@ void merge(vector<pair<string, double>> &data, int low, int mid, int high) {
         k++;
     }
 
-    // Copy the remaining elements (if any)
     while (i < leftSize) {
         data[k] = left[i];
         i++;
@@ -99,43 +94,32 @@ void merge(vector<pair<string, double>> &data, int low, int mid, int high) {
 
 void mergeSort(vector<pair<string, double>> &data, int low, int high) {
     if (low < high) {
-        // Find the middle point of the vector
         int mid = low + (high - low) / 2;
-        // Sort the first and second halves recursively
         mergeSort(data, low, mid);
         mergeSort(data, mid + 1, high);
-        // Merge the sorted halves
         merge(data, low, mid, high);
     }
 }
 
 int partition(vector<std::pair<string, double>> &data, int low, int high) {
-    // Choose a pivot element (last element in this case)
     pair<string, int> pivot = data[high];
 
-    // Index of smaller element
     int i = (low - 1);
 
-    // Partitioning loop
     for (int j = low; j <= high - 1; j++) {
-        // Check if current element is smaller than the pivot
         if (data[j].second <= pivot.second) {
-            i++;                    // increment index of smaller element
-            swap(data[i], data[j]); // swap current element with smaller element
+            i++;
+            swap(data[i], data[j]);
         }
     }
 
-    // Place the pivot element in its correct position
     swap(data[i + 1], data[high]);
     return (i + 1);
 }
 
 void quickSort(vector<pair<string, double>> &data, int low, int high) {
     if (low < high) {
-        // pi is partitioning index, data[p] is now at right place
         int pi = partition(data, low, high);
-
-        // Recursively sort elements before and after partition
         quickSort(data, low, pi - 1);
         quickSort(data, pi + 1, high);
     }
@@ -146,20 +130,17 @@ void printLargestItems(vector<pair<string, double>> &foodList, int order,
     int listSize = 7413;
     int startIndex = listSize - amount + 1;
 
-    // Print based on the order parameter
     string orderStr = (order == 1)   ? "Ascending"
                                      : (order == 2) ? "Descending"
                                                     : "Unsorted";
     cout << "Printing Items (" << orderStr << "):" << std::endl;
 
     if (order == 1) {
-        // Ascending order (starting from startIndex and going up)
         for (int i = startIndex; i <= listSize; i++) {
             cout << listSize - i + 1 << ": " << foodList[i].first << ": "
                  << foodList[i].second << measurement << std::endl;
         }
     } else {
-        // Descending order (starting from the end and going down)
         for (int i = listSize; i >= startIndex; i--) {
             cout << listSize - i + 1 << ": " << foodList[i].first << ": "
                  << foodList[i].second << measurement << std::endl;
